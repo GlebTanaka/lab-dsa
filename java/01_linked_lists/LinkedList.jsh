@@ -50,6 +50,39 @@ public class LinkedList {
   }
 
   // insert
+  public boolean insert(int index, int value) {
+      if (index < 0 || index > length) { // Validate the index
+          return false;
+      }
+
+      if (index == 0) { // Insert at the beginning
+          prepend(value);
+          return true;
+      }
+
+      if (index == length) { // Insert at the end
+          append(value);
+          return true;
+      }
+
+      // Insert in the middle
+      Node newNode = new Node(value);
+      Node temp = head;
+      int currentIndex = 0;
+
+      // Traverse to the node before the specified index
+      while (currentIndex < index - 1) {
+          temp = temp.next;
+          currentIndex++;
+      }
+
+      // Adjust pointers to insert the new node
+      newNode.next = temp.next;
+      temp.next = newNode;
+
+      length++; // Update the length of the list
+      return true;
+  }
 
   // remove last element and return it
   public Node removeLast() {
