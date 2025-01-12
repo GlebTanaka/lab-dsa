@@ -84,6 +84,27 @@ public class LinkedList {
       return true;
   }
 
+  // remove first
+  public Node removeFirst() {
+      if (head == null) { // If the list is empty
+          return null;
+      }
+
+      Node removedNode = head; // The node to be removed
+
+      if (head == tail) { // If there is only one element in the list
+          head = null;
+          tail = null;
+      } else {
+          head = head.next; // Update head to the next node
+      }
+
+      removedNode.next = null; // Detach the removed node
+      length--; // Decrement the size of the list
+
+      return removedNode; // Return the removed node
+  }
+
   // remove last element and return it
   public Node removeLast() {
     if (head == null) { // Empty List
