@@ -6,7 +6,7 @@ public class LinkedList {
 	}
 
 	// Nested Node class
-	private class Node {
+	public class Node {
 		public int Data { get; }
 		public Node Next { get; set; }
 
@@ -29,7 +29,40 @@ public class LinkedList {
 		}
 		current.Next = newNode;
 	}
-
+    
+    // Remove Element at the end
+    public Node RemoveLast() {
+        // Declare the removed node variable just once at the top
+        Node removedNode = null;
+    
+        // Check if the list is empty
+        if (head == null) {
+            Console.WriteLine("List is empty; nothing to remove.");
+            return null;
+        }
+    
+        // Check if the list has only one element
+        if (head.Next == null) {
+            removedNode = head; // Assign the only node
+            head = null; // Set head to null
+            return removedNode; // Return the single node
+        }
+    
+        // Traverse to the second last node
+        Node current = head;
+        while (current.Next.Next != null) {
+            current = current.Next;
+        }
+    
+        // Assign the last node to be removed
+        removedNode = current.Next;
+    
+        // Remove the last node by setting the second last node's Next to null
+        current.Next = null;
+    
+        // Return the removed node
+        return removedNode;
+    }
 	
 	// prepend
 	
