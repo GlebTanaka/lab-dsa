@@ -64,6 +64,21 @@
             return current; // Return the Node at the desired index
         }
 
+        public boolean setAtIndex(int index, int value) {
+            // Use the getAtIndex method to get the Node at the specified index
+            Node targetNode = getAtIndex(index);
+
+            // Check if the node is null (invalid index)
+            if (targetNode == null) {
+                System.out.println("Index out of bounds");
+                return false;
+            }
+
+            // Update the node's value
+            targetNode.value = value;
+            return true;
+        }
+
         // insert
         public boolean insert(int index, int value) {
             if (index < 0 || index > length) { // Validate the index
