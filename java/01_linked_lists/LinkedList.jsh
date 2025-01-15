@@ -49,22 +49,19 @@
             length++;
         }
 
-        // Get the value at the specified index
-        public int getAtIndex(int index) {
+        // Get the Node at a specific index
+        public Node getAtIndex(int index) {
             if (index < 0 || index >= length) { // Validate the index
                 System.out.println("Index out of bounds");
-                return -1; // Can return an error value like -1 or throw an exception
+                return null; // Return null if the index is invalid
             }
 
             Node current = head; // Start from the head
-            int currentIndex = 0;
-
-            // Traverse the list until we reach the desired index
-            while (currentIndex < index) {
+            for (int currentIndex = 0; currentIndex < index; currentIndex++) {
                 current = current.next;
-                currentIndex++;
             }
-            return current.value; // Return the value at the desired index
+
+            return current; // Return the Node at the desired index
         }
 
         // insert
