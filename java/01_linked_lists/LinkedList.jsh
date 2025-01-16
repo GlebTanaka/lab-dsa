@@ -97,14 +97,7 @@
 
             // Insert in the middle
             Node newNode = new Node(value);
-            Node temp = head;
-            int currentIndex = 0;
-
-            // Traverse to the node before the specified index
-            while (currentIndex < index - 1) {
-                temp = temp.next;
-                currentIndex++;
-            }
+            Node temp = getAtIndex(index - 1);
 
             // Adjust pointers to insert the new node
             newNode.next = temp.next;
