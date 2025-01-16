@@ -184,6 +184,23 @@
             return removedNode; // Return the removed node
         }
 
+        public void reverse() {
+            Node prev = null;
+            Node current = head;
+            Node next = null;
+
+            // Loop until we traverse the entire list
+            while (current != null) {
+                next = current.next; // Temporarily store the next node
+                current.next = prev; // Reverse the link
+                prev = current; // Move prev to the current node
+                current = next; // Move current to the next node
+            }
+
+            tail = head; // Update the tail to the original head
+            head = prev; // Update the head to the last non-null node (prev)
+        }
+
         public void printList() {
             Node temp = head;
             while (temp != null) {
