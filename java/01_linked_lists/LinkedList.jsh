@@ -159,6 +159,31 @@
             return current; // Return the removed node
         }
 
+        public Node removeAtIndex(int index) {
+            if (index < 0 || index >= length) { // Validate index
+                System.out.println("Index out of bounds");
+                return null;
+            }
+
+            if (index == 0) { // Remove the first node
+                return removeFirst();
+            }
+
+            if (index == length - 1) { // Remove the last node
+                return removeLast();
+            }
+
+            // General case: Remove a node in the middle
+            Node prev = getAtIndex(index - 1); // Get the previous node
+            Node removedNode = prev.next; // Node to be removed
+            prev.next = removedNode.next; // Update the previous node's next pointer
+
+            removedNode.next = null; // Detach the removed node
+            length--; // Decrement the length
+
+            return removedNode; // Return the removed node
+        }
+
         public void printList() {
             Node temp = head;
             while (temp != null) {
