@@ -77,6 +77,24 @@ public class LinkedList {
         node.Data = newValue; // Update the data of the found node
         return true; // Indicate success
     }
+    
+    // Remove the first element (updating the head pointer)
+    public Node RemoveFirst() {
+        if (head == null) {
+            Console.WriteLine("List is empty; nothing to remove.");
+            return null;
+        }
+    
+        Node removedNode = head; // Save the current head node
+        head = head.Next;        // Update the head pointer to the next node
+    
+        // If the list is now empty, update the tail pointer as well
+        if (head == null) {
+            tail = null;
+        }
+    
+        return removedNode; // Return the removed node
+    }
 
     // Remove the last element (updating the tail pointer)
     public Node RemoveLast() {
