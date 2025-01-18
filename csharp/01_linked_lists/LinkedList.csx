@@ -125,6 +125,50 @@ public class LinkedList {
 
         return removedNode;       // Return the removed node
     }
+    
+    // Remove a node at a specific index
+    public Node RemoveAtIndex(int index) {
+        if (head == null) {
+            Console.WriteLine("List is empty; nothing to remove.");
+            return null;
+        }
+    
+        if (index < 0) {
+            Console.WriteLine("Index cannot be negative.");
+            return null;
+        }
+    
+        // Case 1: Remove the first node
+        if (index == 0) {
+            return RemoveFirst(); // Use the existing RemoveFirst() method
+        }
+    
+        Node current = head;
+        int currentIndex = 0;
+    
+        // Traverse to the node just before the target index
+        while (current.Next != null && currentIndex < index - 1) {
+            current = current.Next;
+            currentIndex++;
+        }
+    
+        // Check if the index is out of bounds
+        if (current.Next == null) {
+            Console.WriteLine("Index out of bounds.");
+            return null;
+        }
+    
+        // Case 2: Remove the target node in the middle or end
+        Node removedNode = current.Next; // The node to be removed
+        current.Next = current.Next.Next; // Skip the removed node
+    
+        // Update the tail if the removed node was the last node
+        if (removedNode == tail) {
+            tail = current;
+        }
+    
+        return removedNode; // Return the removed node
+    }
 
     // Print the list elements
     public void PrintList() {
