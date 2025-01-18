@@ -45,6 +45,38 @@ public class LinkedList {
         newNode.Next = head; // Point new node's Next to the current head
         head = newNode;      // Update the head pointer
     }
+    
+    public Node GetAtIndex(int index) {
+        if (index < 0) {
+            Console.WriteLine("Index cannot be negative.");
+            return null;
+        }
+    
+        Node current = head;
+        int currentIndex = 0;
+    
+        while (current != null) {
+            if (currentIndex == index) {
+                return current; // Found the node at the specified index
+            }
+            current = current.Next; // Move to the next node
+            currentIndex++;
+        }
+    
+        Console.WriteLine("Index out of bounds.");
+        return null; // If the index exceeds the length of the list
+    }
+    
+    public bool SetAtIndex(int index, int newValue) {
+        Node node = GetAtIndex(index); // Use GetAtIndex to find the node
+        if (node == null) {
+            Console.WriteLine("Unable to set value: Index out of bounds.");
+            return false; // Indicate failure to set the value
+        }
+    
+        node.Data = newValue; // Update the data of the found node
+        return true; // Indicate success
+    }
 
     // Remove the last element (updating the tail pointer)
     public Node RemoveLast() {
