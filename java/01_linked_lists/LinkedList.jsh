@@ -4,6 +4,14 @@
         private Node tail;
         private int length;
 
+        // Helper method to check index bounds
+        private boolean isIndexOutOfBounds(int index, boolean inclusiveUpperBound) {
+            if (inclusiveUpperBound) {
+                return index < 0 || index > length;
+            } else {
+                return index < 0 || index >= length;
+            }
+        }
         // Nested Node class
         private class Node {
             int value;
@@ -54,7 +62,7 @@
 
         // Get the node at a specific index
         public Node getAtIndex(int index) {
-            if (index < 0 || index >= getLength()) { // Use getLength()
+            if (isIndexOutOfBounds(index, false)) { // Use helper method
                 System.out.println("Index out of bounds");
                 return null;
             }
@@ -78,7 +86,7 @@
 
         // Insert a node at a specific index
         public boolean insert(int index, int value) {
-            if (index < 0 || index > getLength()) { // Validate bounds using getLength()
+            if (isIndexOutOfBounds(index, true)) { // Use helper method
                 return false;
             }
 
@@ -104,7 +112,7 @@
 
         // Remove a node from the list by index
         public Node removeAtIndex(int index) {
-            if (index < 0 || index >= getLength()) { // Validate bounds with getLength()
+            if (isIndexOutOfBounds(index, false)) { // Use helper method
                 System.out.println("Index out of bounds");
                 return null;
             }
