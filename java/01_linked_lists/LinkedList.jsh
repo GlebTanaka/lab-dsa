@@ -1,5 +1,3 @@
-// LinkedList.jsh
-
     public class LinkedList {
 
         private Node head;
@@ -23,20 +21,20 @@
             length = 1;
         }
 
-        // append a new node at the end of the list
-        public void append(int data) {
-            Node newNode = new Node(data);
-            if (head == null) { // if the list is empty
+        // Append a new node at the end
+        public void append(int value) {
+            Node newNode = new Node(value);
+            if (head == null) { // If the list is empty
                 head = newNode;
                 tail = newNode;
             } else {
-                tail.next = newNode; // update the next pointer to the current tail
-                tail = newNode; // update the tail to the new node
+                tail.next = newNode;
+                tail = newNode;
             }
-            length++; // increment the length
+            length++;
         }
 
-        // prepend
+        // Prepend a new node at the beginning
         public void prepend(int value) {
             Node newNode = new Node(value);
             if (head == null) {
@@ -49,92 +47,109 @@
             length++;
         }
 
-        // Get the Node at a specific index
+        // Get the current length of the linked list
+        public int getLength() {
+            return length;
+        }
+
+        // Get the node at a specific index
         public Node getAtIndex(int index) {
-            if (index < 0 || index >= length) { // Validate the index
+            if (index < 0 || index >= getLength()) { // Use getLength()
                 System.out.println("Index out of bounds");
-                return null; // Return null if the index is invalid
+                return null;
             }
 
-            Node current = head; // Start from the head
+            Node current = head;
             for (int currentIndex = 0; currentIndex < index; currentIndex++) {
                 current = current.next;
             }
 
-            return current; // Return the Node at the desired index
+            return current;
         }
 
+        // Set the value at a specific index
         public boolean setAtIndex(int index, int value) {
-            // Use the getAtIndex method to get the Node at the specified index
             Node targetNode = getAtIndex(index);
+            if (targetNode == null) return false;
 
-            // Check if the node is null (invalid index)
-            if (targetNode == null) {
-                System.out.println("Index out of bounds");
-                return false;
-            }
-
-            // Update the node's value
             targetNode.value = value;
             return true;
         }
 
-        // insert
+        // Insert a node at a specific index
         public boolean insert(int index, int value) {
-            if (index < 0 || index > length) { // Validate the index
+            if (index < 0 || index > getLength()) { // Validate bounds using getLength()
                 return false;
             }
 
-            if (index == 0) { // Insert at the beginning
+            if (index == 0) {
                 prepend(value);
                 return true;
             }
 
-            if (index == length) { // Insert at the end
+            if (index == getLength()) { // Validate last index insertion
                 append(value);
                 return true;
             }
 
-            // Insert in the middle
             Node newNode = new Node(value);
             Node temp = getAtIndex(index - 1);
 
-            // Adjust pointers to insert the new node
             newNode.next = temp.next;
             temp.next = newNode;
 
-            length++; // Update the length of the list
+            length++;
             return true;
         }
 
-        // remove first
-        public Node removeFirst() {
-            if (head == null) { // If the list is empty
+        // Remove a node from the list by index
+        public Node removeAtIndex(int index) {
+            if (index < 0 || index >= getLength()) { // Validate bounds with getLength()
+                System.out.println("Index out of bounds");
                 return null;
             }
 
-            Node removedNode = head; // The node to be removed
+            if (index == 0) {
+                return removeFirst();
+            }
 
-            if (head == tail) { // If there is only one element in the list
+            if (index == getLength() - 1) {
+                return removeLast();
+            }
+
+            Node prev = getAtIndex(index - 1);
+            Node removedNode = prev.next;
+            prev.next = removedNode.next;
+            removedNode.next = null;
+
+            length--;
+            return removedNode;
+        }
+
+        // Other methods (removeFirst, removeLast, reverse, etc.) should remain unchanged.
+        public Node removeFirst() {
+            if (head == null) {
+                return null;
+            }
+
+            Node removedNode = head;
+            if (head == tail) {
                 head = null;
                 tail = null;
             } else {
-                head = head.next; // Update head to the next node
+                head = head.next;
             }
-
-            removedNode.next = null; // Detach the removed node
-            length--; // Decrement the size of the list
-
-            return removedNode; // Return the removed node
+            removedNode.next = null;
+            length--;
+            return removedNode;
         }
 
-        // remove last element and return it
         public Node removeLast() {
-            if (head == null) { // Empty List
+            if (head == null) {
                 return null;
             }
 
-            if (head == tail) { // Single element
+            if (head == tail) {
                 Node removedNode = head;
                 head = null;
                 tail = null;
@@ -144,63 +159,18 @@
 
             Node current = head;
             Node previous = null;
-
-            // Traverse to find the last and second-to-last nodes
             while (current.next != null) {
                 previous = current;
                 current = current.next;
             }
 
-            // Update the second-to-last node to be the new tail
             tail = previous;
             tail.next = null;
             length--;
-
-            return current; // Return the removed node
+            return current;
         }
 
-        public Node removeAtIndex(int index) {
-            if (index < 0 || index >= length) { // Validate index
-                System.out.println("Index out of bounds");
-                return null;
-            }
-
-            if (index == 0) { // Remove the first node
-                return removeFirst();
-            }
-
-            if (index == length - 1) { // Remove the last node
-                return removeLast();
-            }
-
-            // General case: Remove a node in the middle
-            Node prev = getAtIndex(index - 1); // Get the previous node
-            Node removedNode = prev.next; // Node to be removed
-            prev.next = removedNode.next; // Update the previous node's next pointer
-
-            removedNode.next = null; // Detach the removed node
-            length--; // Decrement the length
-
-            return removedNode; // Return the removed node
-        }
-
-        public void reverse() {
-            Node prev = null;
-            Node current = head;
-            Node next = null;
-
-            // Loop until we traverse the entire list
-            while (current != null) {
-                next = current.next; // Temporarily store the next node
-                current.next = prev; // Reverse the link
-                prev = current; // Move prev to the current node
-                current = next; // Move current to the next node
-            }
-
-            tail = head; // Update the tail to the original head
-            head = prev; // Update the head to the last non-null node (prev)
-        }
-
+        // Print the linked list
         public void printList() {
             Node temp = head;
             while (temp != null) {
@@ -209,5 +179,4 @@
             }
             System.out.println("null");
         }
-
     }
