@@ -51,6 +51,23 @@ public class LinkedList {
         }
         length++; // Increment on adding a node
     }
+    
+    public Node GetAtIndex(int index) {
+        if (index < 0 || index >= length) {
+            Console.WriteLine("Index out of bounds.");
+            return null; // Return null if the specified index is invalid
+        }
+    
+        Node current = head; // Start at the head of the list
+        int currentIndex = 0;
+    
+        while (currentIndex < index) {
+            current = current.Next; // Move to the next node
+            currentIndex++;
+        }
+    
+        return current; // Return the node at the specified index
+    }
 
     // Remove the first element and update length
     public Node RemoveFirst() {
