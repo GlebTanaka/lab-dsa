@@ -68,6 +68,20 @@ public class LinkedList {
     
         return current; // Return the node at the specified index
     }
+    
+    public void SetAtIndex(int index, int newData) {
+        // Use GetAtIndex to retrieve the node at the specified index
+        Node nodeToSet = GetAtIndex(index);
+    
+        // Check if the node exists (GetAtIndex will return null if the index is invalid)
+        if (nodeToSet == null) {
+            Console.WriteLine("Cannot set data: Index out of bounds.");
+            return;
+        }
+    
+        // Update the data in the node
+        nodeToSet.Data = newData;
+    }
 
     // Remove the first element and update length
     public Node RemoveFirst() {
@@ -153,5 +167,20 @@ public class LinkedList {
 
         length--; // Decrement on removing a node
         return removedNode;
+    }
+    
+    public void PrintList() {
+        if (head == null) {
+            Console.WriteLine("The list is empty.");
+            return;
+        }
+    
+        Node current = head; // Start at the head of the list
+        while (current != null) {
+            Console.Write(current.Data + " -> "); // Print the current node's data
+            current = current.Next; // Move to the next node
+        }
+    
+        Console.WriteLine("null"); // Indicate the end of the list
     }
 }
