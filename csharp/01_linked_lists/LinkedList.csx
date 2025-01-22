@@ -82,6 +82,34 @@ public class LinkedList {
         // Update the data in the node
         nodeToSet.Data = newData;
     }
+    
+    public void Insert(int index, int value) {
+        // Validate the index
+        if (index < 0 || index > length) {
+            Console.WriteLine("Index out of bounds.");
+            return;
+        }
+    
+        // Handle insertion at the beginning
+        if (index == 0) {
+            Prepend(value);
+            return;
+        }
+    
+        // Handle insertion at the end
+        if (index == length) {
+            Append(value);
+            return;
+        }
+    
+        // Insertion in the middle
+        Node newNode = new Node(value);
+        Node previousNode = GetAtIndex(index - 1); // Get the node before the specified index
+        newNode.Next = previousNode.Next; // Point the new node to the next node
+        previousNode.Next = newNode; // Update the previous node's next pointer to point to the new node
+    
+        length++; // Increment the list size
+    }
 
     // Remove the first element and update length
     public Node RemoveFirst() {
