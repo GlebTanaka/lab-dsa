@@ -178,6 +178,25 @@
             return current;
         }
 
+        // Reverse the linked list in-place
+        public void reverse() {
+            Node prev = null;
+            Node current = head;
+            Node next = null;
+
+            // Traverse the list and reverse the next pointers
+            while (current != null) {
+                next = current.next;  // Store the next node
+                current.next = prev;  // Reverse the current node's pointer
+                prev = current;       // Move 'prev' forward
+                current = next;       // Move 'current' forward
+            }
+
+            // Update head and tail pointers
+            tail = head;
+            head = prev;
+        }
+
         // Print the linked list
         public void printList() {
             Node temp = head;
