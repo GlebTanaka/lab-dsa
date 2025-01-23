@@ -197,6 +197,23 @@ public class LinkedList {
         return removedNode;
     }
     
+    public void Reverse() {
+        Node prev = null; // Pointer to the previous node (initially null)
+        Node current = head; // Start with the head of the list
+        Node nextNode = null; // Temporary node to store the next node
+    
+        while (current != null) {
+            nextNode = current.Next; // Save the next node
+            current.Next = prev;     // Reverse the current node's pointer
+            prev = current;          // Move prev to the current node
+            current = nextNode;      // Move current to the next node
+        }
+    
+        // After the loop, update head and tail
+        tail = head;   // Old head becomes the new tail
+        head = prev;   // prev is the new head of the reversed list
+    }
+    
     public void PrintList() {
         if (head == null) {
             Console.WriteLine("The list is empty.");
