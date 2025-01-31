@@ -113,6 +113,33 @@ public class DoublyLinkedList {
         return removedNode;
     }
 
+    public Node getAtIndex(int index) {
+        // Step 1: Check if the index is out of bounds
+        if (index < 0 || index >= length) {
+            return null; // Return null for invalid index
+        }
+
+        Node current;
+
+        // Step 2: Optimize traversal by selecting the direction
+        if (index < length / 2) {
+            // Start from head and move forward
+            current = head;
+            for (int i = 0; i < index; i++) {
+                current = current.next;
+            }
+        } else {
+            // Start from tail and move backward
+            current = tail;
+            for (int i = length - 1; i > index; i--) {
+                current = current.prev;
+            }
+        }
+
+        // Step 3 & 4: Return the node at the desired index
+        return current;
+    }
+
     public void printList() {
         // Start at the head of the list
         Node current = head;
