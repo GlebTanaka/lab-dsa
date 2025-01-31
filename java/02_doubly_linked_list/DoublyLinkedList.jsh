@@ -56,6 +56,35 @@ public class DoublyLinkedList {
         length++;
     }
 
+    public Node removeFirst() {
+        // Step 1: Handle the empty list case
+        if (head == null) { // List is empty
+            return null;
+        }
+
+        // Step 2: Store reference to the current head
+        Node removedNode = head;
+
+        // Step 3: Handle the single-node list case
+        if (head == tail) { // List has only one node
+            head = null;
+            tail = null;
+        } else {
+            // Step 4: Update the head to the next node and adjust references
+            head = head.next;
+            head.prev = null; // Remove reference to the old head
+        }
+
+        // Step 5: Completely disconnect the removed node
+        removedNode.next = null;
+
+        // Step 6: Update the length
+        length--;
+
+        // Step 7: Return the removed node
+        return removedNode;
+    }
+
     public Node removeLast() {
         // Step 1: Handle edge case where the list is empty
         if (head == null) { // `length == 0` the list is empty nothing to remove
