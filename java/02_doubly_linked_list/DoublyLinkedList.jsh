@@ -140,6 +140,20 @@ public class DoublyLinkedList {
         return current;
     }
 
+    public boolean setAtIndex(int index, int value) {
+        // Step 1: Use getAtIndex to get the node at the specified index
+        Node nodeToUpdate = getAtIndex(index);
+
+        // Step 2: Check if the node exists (valid index)
+        if (nodeToUpdate == null) {
+            return false; // Index is out of bounds, return false
+        }
+
+        // Step 3: Update the node's value
+        nodeToUpdate.value = value;
+        return true; // Update was successful, return true
+    }
+
     public void printList() {
         // Start at the head of the list
         Node current = head;
