@@ -154,6 +154,50 @@ public class DoublyLinkedList {
         return true; // Update was successful, return true
     }
 
+    public boolean insertAtIndex(int index, int value) {
+        // Step 1: Check if the index is valid
+        if (index < 0 || index > length) {
+            return false; // Index is out of bounds
+        }
+
+        // Step 2: Handle inserting at the beginning of the list
+        if (index == 0) {
+            prepend(value);
+            return true;
+        }
+
+        // Step 3: Handle inserting at the end of the list
+        if (index == length) {
+            append(value);
+            return true;
+        }
+
+        // Step 4: For all other cases, find the node at the specified index - 1
+        Node prevNode = getAtIndex(index - 1); // Get the node at index - 1
+        if (prevNode == null) {
+            return false; // Safeguard in case getAtIndex unexpectedly fails
+        }
+
+        // Step 5: Create a new node with the given value
+        Node newNode = new Node(value);
+
+        // Step 6: Update the pointers to insert the new node at the correct position
+        Node nextNode = prevNode.next;  // The node currently at the given index
+        newNode.next = nextNode;        // Link new node to the next node
+        newNode.prev = prevNode;        // Link new node back to the previous node
+
+        prevNode.next = newNode;        // Link previous node to the new node
+        if (nextNode != null) {
+            nextNode.prev = newNode;    // Link the next node back to the new node
+        }
+
+        // Step 7: Increment the length of the list
+        length++;
+
+        // Step 8: Return true to indicate success
+        return true;
+    }
+
     public void printList() {
         // Start at the head of the list
         Node current = head;
