@@ -113,6 +113,85 @@ public class DoublyLinkedList {
         return removedNode;
     }
 
+    public Node removeAtIndex(int index) {
+        // Step 1: Check if index is out of bounds
+        if (index < 0 || index >= length) {
+            return null; // Invalid index
+        }
+
+        // Step 2: Handle edge cases for removing the first or last node
+        if (index == 0) {
+            return removeFirst(); // Use removeFirst() for index 0
+        }
+
+        if (index == length - 1) {
+            return removeLast(); // Use removeLast() for the last index
+        }
+
+        // Step 3: Find the node at the specified index
+        Node nodeToRemove = getAtIndex(index);
+        if (nodeToRemove == null) {
+            return null; // Safeguard in case getAtIndex unexpectedly fails
+        }
+
+        // Step 4: Update the previous and next nodes to skip over the node to remove
+        Node prevNode = nodeToRemove.prev;
+        Node nextNode = nodeToRemove.next;
+
+        if (prevNode != null) {
+            prevNode.next = nextNode; // Update the next pointer of the previous node
+        }
+
+        if (nextNode != null) {
+            nextNode.prev = prevNode; // Update the prev pointer of the next node
+        }
+
+        // Step 5: Disconnect the node from the list
+        nodeToRemove.prev = null;
+        nodeToRemove.next = null;
+
+        // Step 6: Decrement the length of the list
+        length--;
+
+        // Step 7: Return the removed node
+        return nodeToRemove;
+    }
+
+    public Node removeAtIndexOnePointer(int index) {
+        // Step 1: Check if index is out of bounds
+        if (index < 0 || index >= length) {
+            return null; // Invalid index
+        }
+
+        // Step 2: Handle edge cases for first or last node
+        if (index == 0) {
+            return removeFirst(); // Use existing method to remove the first node
+        }
+        if (index == length - 1) {
+            return removeLast(); // Use existing method to remove the last node
+        }
+
+        // Step 3: Use getAtIndex to get the node at the specified index
+        Node nodeToRemove = getAtIndex(index);
+        if (nodeToRemove == null) {
+            return null; // Safeguard in case getAtIndex unexpectedly fails
+        }
+
+        // Step 4: Update the pointers to remove the node
+        nodeToRemove.prev.next = nodeToRemove.next;  // Link previous node to the next node
+        nodeToRemove.next.prev = nodeToRemove.prev;  // Link next node to the previous node
+
+        // Step 5: Disconnect the node to be removed
+        nodeToRemove.prev = null;
+        nodeToRemove.next = null;
+
+        // Step 6: Decrement the length of the list
+        length--;
+
+        // Step 7: Return the removed node
+        return nodeToRemove;
+    }
+
     public Node getAtIndex(int index) {
         // Step 1: Check if the index is out of bounds
         if (index < 0 || index >= length) {
