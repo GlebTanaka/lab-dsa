@@ -62,6 +62,21 @@ public class DoublyLinkedList
     }
 
     // Add a value to the end of the list
+    public void Prepend(int value)
+    {
+        Node newNode = new Node(value); // Create a new node with the given value
+        if (head == null) // If the list is empty
+        {
+            head = tail = newNode; // Set both head and tail to the new node
+        }
+        else
+        {
+            newNode.Next = head;   // Link the new node's "Next" to the head
+            head.Prev = newNode;   // Link the current head's "Prev" to the new node
+            head = newNode;        // Update head to point to the new node
+        }
+        length++; // Increment the length of the list
+    }
 
 
     // Remove a value from the front of the list
