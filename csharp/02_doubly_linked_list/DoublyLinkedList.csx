@@ -79,13 +79,73 @@ public class DoublyLinkedList
     }
 
 
-    // Remove a value from the front of the list
+    // Remove a value from the front of the list and return the removed node
+    public Node RemoveFirst()
+    {
+        if (head == null) // The list is empty
+        {
+            Console.WriteLine("The list is already empty.");
+            return null; // Indicate that there was no node to remove
+        }
+    
+        Node removedNode = head; // Save the reference to the current head
+    
+        if (head == tail) // The list has only one node
+        {
+            head = null;
+            tail = null;
+        }
+        else // The list has more than one node
+        {
+            head = head.Next;    // Move head to the next node
+            head.Prev = null;    // Dereference the old head
+        }
+    
+        length--; // Decrement the length of the list
+        removedNode.Next = null; // Clean up the removed node's references
+        removedNode.Prev = null;
+    
+        return removedNode; // Return the removed node
+    }
 
-
-    // Remove a value from the back of the list
-
+    // Remove a value from the back of the list and return the removed node
+    public Node RemoveLast()
+    {
+        if (tail == null) // The list is empty
+        {
+            Console.WriteLine("The list is already empty.");
+            return null; // Indicate that there was no node to remove
+        }
+    
+        Node removedNode = tail; // Save the reference to the current tail
+    
+        if (head == tail) // The list has only one node
+        {
+            head = null;
+            tail = null;
+        }
+        else // The list has more than one node
+        {
+            tail = tail.Prev;    // Move tail to the previous node
+            tail.Next = null;    // Dereference the old tail
+        }
+    
+        length--; // Decrement the length of the list
+        removedNode.Next = null; // Clean up the removed node's references
+        removedNode.Prev = null;
+    
+        return removedNode; // Return the removed node
+    }
+    
+    // removing at index using two pointer
+    
+    // removing at index using only one pointer
 
     // Clear the entire list
+    
+    // get an element at a specific index
+    
+    // set an element at a specific index
 
 
     // Print the list forwards
