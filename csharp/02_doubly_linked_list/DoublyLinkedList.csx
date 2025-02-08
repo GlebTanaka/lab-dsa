@@ -137,17 +137,115 @@ public class DoublyLinkedList
         return removedNode; // Return the removed node
     }
     
-    // removing at index using two pointer
+    // Get a node at a specific index
+    public Node GetAtIndex(int index)
+    {
+        // Step 1: Check if the index is out of bounds
+        if (index < 0 || index >= length)
+        {
+            throw new ArgumentOutOfRangeException("Index out of range.");
+        }
+        
+        Node current;
+        
+        // Step 2: Optimize traversal
+        if (index < length / 2) // Efficient: Traverse from the head if index is in the first half
+        {
+            current = head;
+            for (int i = 0; i < index; i++)
+            {
+                current = current.Next;
+            }
+        }
+        else // Efficient: Traverse from the tail if index is in the second half
+        {
+            current = tail;
+            for (int i = length - 1; i > index; i--)
+            {
+                current = current.Prev;
+            }
+        }
+        
+        return current; // Return the node at the specified index
+    }
+        
+    // set an element at a specific index
     
-    // removing at index using only one pointer
+    // Remove a node at a specific index using two pointers and GetAtIndex
+    public Node RemoveAtIndexUsingTwoPointers(int index)
+    {
+        if (index < 0 || index >= length) // Ensure index is within valid range
+        {
+            throw new ArgumentOutOfRangeException("Index out of range.");
+        }
+    
+        if (index == 0) // If removing the first node
+        {
+            return RemoveFirst();
+        }
+        
+        if (index == length - 1) // If removing the last node
+        {
+            return RemoveLast();
+        }
+    
+        // Use GetAtIndex to get the node to remove
+        Node nodeToRemove = GetAtIndex(index);
+    
+        // Update pointers to bypass the node
+        nodeToRemove.Prev.Next = nodeToRemove.Next; // Link previous node to next node
+        nodeToRemove.Next.Prev = nodeToRemove.Prev; // Link next node to previous node
+    
+        // Clean up references in the removed node
+        nodeToRemove.Next = null;
+        nodeToRemove.Prev = null;
+    
+        length--; // Decrement the length
+    
+        return nodeToRemove; // Return the removed node
+    }
+    
+    // Remove a node at a specific index using only one pointer
+    public Node RemoveAtIndexUsingOnePointer(int index)
+    {
+        if (index < 0 || index >= length) // Ensure index is valid
+        {
+            throw new ArgumentOutOfRangeException("Index out of range.");
+        }
+    
+        if (index == 0) // If removing the first node
+        {
+            return RemoveFirst();
+        }
+    
+        if (index == length - 1) // If removing the last node
+        {
+            return RemoveLast();
+        }
+    
+        Node current = head; // Start traversal from the head
+    
+        // Traverse to the target node
+        for (int i = 0; i < index; i++)
+        {
+            current = current.Next;
+        }
+    
+        // Update pointers to bypass the node being removed
+        current.Prev.Next = current.Next; // Link previous node to next node
+        current.Next.Prev = current.Prev; // Link next node to previous node
+    
+        // Clean up the removed node's references
+        current.Next = null;
+        current.Prev = null;
+    
+        length--; // Decrement the length
+    
+        return current; // Return the removed node
+    }
 
     // Clear the entire list
     
-    // get an element at a specific index
-    
-    // set an element at a specific index
-
-
     // Print the list forwards
     public void PrintForward()
     {
