@@ -7,7 +7,7 @@ public class DoublyLinkedList
     private int length;
     
     // Nested Node class
-    private class Node
+    public class Node
     {
         public int Data { get; set; }
         public Node Next { get; set; }
@@ -45,7 +45,7 @@ public class DoublyLinkedList
     public bool IsEmpty => length == 0;
 
     // Add a value to the front of the list
-    public void Append(int value)
+    public void Prepend(int value)
     {
         Node newNode = new Node(value);
         if (head == null) // If list is empty
@@ -62,22 +62,21 @@ public class DoublyLinkedList
     }
 
     // Add a value to the end of the list
-    public void Prepend(int value)
+    public void Append(int value)
     {
-        Node newNode = new Node(value); // Create a new node with the given value
-        if (head == null) // If the list is empty
+        Node newNode = new Node(value);
+        if (head == null) // If list is empty
         {
-            head = tail = newNode; // Set both head and tail to the new node
+            head = tail = newNode;
         }
         else
         {
-            newNode.Next = head;   // Link the new node's "Next" to the head
-            head.Prev = newNode;   // Link the current head's "Prev" to the new node
-            head = newNode;        // Update head to point to the new node
+            tail.Next = newNode; // Point the current tail's Next to the new node
+            newNode.Prev = tail; // Point the new node's Prev to the current tail
+            tail = newNode;      // Update the tail to be the new node
         }
-        length++; // Increment the length of the list
+        length++;
     }
-
 
     // Remove a value from the front of the list and return the removed node
     public Node RemoveFirst()
@@ -169,7 +168,85 @@ public class DoublyLinkedList
         return current; // Return the node at the specified index
     }
         
-    // set an element at a specific index
+    // Set an element at a specific index
+    public void SetAtIndex(int index, int value)
+    {
+        // Step 1: Check if the index is out of bounds
+        if (index < 0 || index >= length)
+        {
+            throw new ArgumentOutOfRangeException("Index is out of range.");
+        }
+    
+        // Step 2: Retrieve the node at the specified index
+        Node nodeToUpdate = GetAtIndex(index);
+        
+        // Step 3: Update the node's data
+        nodeToUpdate.Data = value;
+    }
+    
+    // Insert a new value at a specific index
+    /*
+     Summary:
+    
+     When working with linked list operations, both approaches—retrieving the current node
+     at a specific index or retrieving the previous node—are valid, and the choice depends
+     on the specific operation:
+     
+     1. Using `GetAtIndex(index)`:
+        - Retrieve the node directly at the given index.
+        - Useful when:
+            - You need to access or modify the data of the node at a specific position.
+            - You are traversing or working directly with that node without modifying
+              the list's structure (e.g., `Next` or `Prev` pointers).
+    
+     2. Using `GetAtIndex(index - 1)`:
+        - Retrieve the node before the desired index.
+        - Useful when:
+            - You're inserting a new node and need the previous node to properly update
+              the links/pointers.
+            - You're deleting a node and need the previous node to bypass the one being
+              removed.
+    
+     Both approaches are valid and depend on the specific needs of the operation. 
+    */
+    public void InsertAtIndex(int index, int value)
+    {
+        // Step 1: Check if the index is out of bounds for insertion
+        if (index < 0 || index > length)
+        {
+            throw new ArgumentOutOfRangeException("Index is out of range.");
+        }
+    
+        // Step 2: Special cases for inserting at the beginning or end of the list
+        if (index == 0) // Insert at the head
+        {
+            Prepend(value); // Use the existing Prepend method
+            return;
+        }
+    
+        if (index == length) // Insert at the tail
+        {
+            Append(value); // Use the existing Append method
+            return;
+        }
+    
+        // Step 3: Create a new node with the given value
+        Node newNode = new Node(value);
+    
+        // Step 4: Retrieve the node at the specified index (the node currently at that position)
+        Node current = GetAtIndex(index);
+    
+        // Step 5: Update the new node's pointers to fit into its position
+        newNode.Prev = current.Prev; // Point the new node's Prev to the node before the 'current' node
+        newNode.Next = current;     // Point the new node's Next to the 'current' node
+    
+        // Step 6: Update the neighboring nodes to link to the new node
+        current.Prev.Next = newNode; // The previous node points to the new node
+        current.Prev = newNode;      // The current node's Prev points to the new node
+    
+        // Step 7: Increment the length of the list
+        length++;
+    }
     
     // Remove a node at a specific index using two pointers and GetAtIndex
     public Node RemoveAtIndexUsingTwoPointers(int index)
