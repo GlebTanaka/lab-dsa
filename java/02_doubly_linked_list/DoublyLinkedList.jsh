@@ -277,6 +277,46 @@ public class DoublyLinkedList {
         return true;
     }
 
+    public boolean insertAtIndexUsingGetCall(int index, int value) {
+        // Step 1: Validate the index
+        if (index < 0 || index > length) {
+            return false; // Index out of bounds
+        }
+
+        // Step 2: Handle special cases for inserting at head or tail
+        if (index == 0) {
+            prepend(value); // Use existing `prepend` function
+            return true;
+        }
+        if (index == length) {
+            append(value); // Use existing `append` function
+            return true;
+        }
+
+        // Step 3: Find the node currently at 'index' using `getAtIndex`
+        Node currentNode = getAtIndex(index); // The node currently at the index
+        Node prevNode = getAtIndex(index - 1); // The previous node
+
+        // Step 4: Create the new node to be inserted
+        Node newNode = new Node(value);
+
+        // Step 5: Update pointers to insert the new node
+        if (prevNode != null) {
+            prevNode.next = newNode; // Link the previous node to the new node
+            newNode.prev = prevNode; // Link the new node back to the previous node
+        }
+
+        if (currentNode != null) {
+            newNode.next = currentNode; // Link the new node to the current node
+            currentNode.prev = newNode; // Link the current node back to the new node
+        }
+
+        // Step 6: Increment the length of the list
+        length++;
+
+        return true; // Insertion was successful
+    }
+
     public void printList() {
         // Start at the head of the list
         Node current = head;
