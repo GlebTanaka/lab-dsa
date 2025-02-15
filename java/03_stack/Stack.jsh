@@ -50,6 +50,22 @@ public class Stack {
         }
     }
 
+    public boolean isEmpty() {
+        return top == null;
+    }
+
+    public int peek() {
+        if (top == null) {
+            throw new IllegalStateException("Stack is empty.");
+        }
+        return top.value;
+    }
+
+    public void clear() {
+        top = null;
+        height = 0;
+    }
+
     public void getHeight() {
         System.out.println(height);
     }
