@@ -18,20 +18,22 @@ public class Stack {
 
     public void push(int value) {
         Node newNode = new Node(value);
+        // Checking for null is not required here because even if 'top' is null
         newNode.next = top; // Link the new node to the current top node
         top = newNode;      // Update the top pointer to the new node
         height++;           // Increment stack height
     }
 
-    public int pop() {
+    public Node pop() {
         if (top == null) {
             System.out.println("Stack is empty. Cannot pop.");
-            return -1; // Or throw an exception (e.g., EmptyStackException)
+            return null; // Return null to signify an empty stack
         }
-        int poppedValue = top.value; // Store the current top value
-        top = top.next;              // Move the top pointer to the next node
-        height--;                    // Decrement stack height
-        return poppedValue;          // Return the removed value
+        Node poppedNode = top;  // Store the current top node
+        top = top.next;         // Move the top pointer to the next node
+        poppedNode.next = null; // Clear the `next` reference of the popped node (sanitization)
+        height--;               // Decrement stack height
+        return poppedNode;      // Return the removed node
     }
 
     public void printStack() {
