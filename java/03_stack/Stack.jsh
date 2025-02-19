@@ -25,7 +25,7 @@ public class Stack {
     }
 
     public Node pop() {
-        if (top == null) {
+        if (isEmpty()) {  // Use isEmpty() instead of top == null
             System.out.println("Stack is empty. Cannot pop.");
             return null; // Return null to signify an empty stack
         }
