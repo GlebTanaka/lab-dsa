@@ -11,11 +11,13 @@ public class Queue {
 
     private Node first;
     private Node last;
+    int length;
 
     public Queue(int value) {
         Node newNode = new Node(value);
         first = newNode;
         last = newNode;
+        length = 1;
     }
 
     public void enqueue(int value) {
@@ -41,5 +43,30 @@ public class Queue {
 
     public boolean isEmpty() {
         return first == null;
+    }
+
+    public int getLength() {
+        return length;
+    }
+
+    public Node getFirst() {
+        return first;
+    }
+
+    public Node getLast() {
+        return last;
+    }
+
+    public void printQueue() {
+        if (getFirst() == null) { // Using getFirst() directly
+            System.out.println("Queue is empty.");
+            return;
+        }
+        Node current = getFirst();
+        while (current != null) {
+            System.out.print(current.value + " ");
+            current = current.next;
+        }
+        System.out.println();
     }
 }
