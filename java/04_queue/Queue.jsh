@@ -22,23 +22,27 @@ public class Queue {
 
     public void enqueue(int value) {
         Node node = new Node(value);
-        if (last == null) {
+        if (last == null) { // If the queue is empty
             first = node;
-        } else {
+            last = node;
+        } else { // Add the new node to the end of the queue
             last.next = node;
+            last = node; // Update the `last` reference
         }
+        length++; // Increment the queue length
     }
 
-    public Node dequeue() {
-        if (first == null) {
-            return null;
+    public int dequeue() {
+        if (first == null) { // Check if the queue is empty
+            return -1; // Return a sentinel value (e.g., -1) or throw an exception
         }
-        Node node = first;
-        first = first.next;
-        if (first == null) {
-            last = null;
+        Node node = first; // Store the current first node
+        first = first.next; // Move the first pointer to the next node
+        if (first == null) { // If the queue is now empty
+            last = null; // Update the last pointer to null
         }
-        return node;
+        length--; // Decrement the length
+        return node.value; // Return the value of the dequeued node
     }
 
     public boolean isEmpty() {
