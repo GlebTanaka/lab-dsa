@@ -1,4 +1,6 @@
 import java.util.HashMap;
+import java.util.function.Predicate;
+import java.util.Arrays;
 
 // exponential time complexity O(2^n)
 public static int fibRecursive(int n) {
@@ -28,6 +30,26 @@ private static int fibHelper(int n, HashMap<Integer, Integer> memo) {
     memo.put(n, result);
 
     return result;
+}
+
+public int lenLongestFibSubseq(int[] arr) {
+    // Define the Predicateas a lambda expression
+    Predicate<Long> isPerfectSquare = num -> {
+        long sqrt = (long) Math.sqrt(num);
+	return sqrt * sqrt == num;
+    };
+
+    // use a stream to count Fibonacci numbers
+    int count = (int) Arrays.stream(arr).
+        filter(n -> n > 0). // only precess positive numbers
+	filter(n -> {
+	    //check if the number is a Fibonacci number
+	    long n1 = 5L * n * n + 4;
+	    long n2 = 5L * n * n - 4;
+	    return isPerfectSquare.test(n1) || isPerfectSquare.test(n2);
+    }).count(); // Terminal operation to count the resuls
+
+    return count;
 }
 
 
