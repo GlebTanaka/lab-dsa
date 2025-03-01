@@ -52,4 +52,46 @@ public int lenLongestFibSubseq(int[] arr) {
     return count;
 }
 
+// longest Fibonacci-like subsequence in an in array
+
+   public int lenLongestFibSubseq(int[] arr) {
+
+        if (arr.length < 3) {
+            return 0; // No Fibonacci-like subsequence possible with fewer than 3 elements
+        }
+
+        // Store all array elements into a HashSet for O(1) lookups
+        Set<Integer> arraySet = new HashSet<>();
+        for (int num : arr) {
+            arraySet.add(num);
+        }
+
+        // Map to store the longest subsequence ending with (x, y)
+        Map<Integer, Map<Integer, Integer>> dp = new HashMap<>();
+        int maxLength = 0;
+
+         // Traverse all pairs of numbers in the array
+        for (int i = 0; i < arr.length; i++) {
+            for (int j = 0; j < i; j++) {
+                int x = arr[j]; // First number in the pair
+                int y = arr[i]; // Second number in the pair
+                int z = x + y;  // The expected third number
+
+                // Only update dp and maxLength if the third number z exists in the array
+                if (arraySet.contains(z)) {
+                    // Get the length of the sequence ending at (x, y), defaulting to 2
+                    int length = dp.getOrDefault(x, new HashMap<>()).getOrDefault(y, 2);
+
+                    // Update dp for the current pair (y, z)
+                    dp.computeIfAbsent(y, k -> new HashMap<>()).put(z, length + 1);
+
+                    // Update maxLength with the new length
+                    maxLength = Math.max(maxLength, length + 1);
+                }
+            }
+        }
+
+        // A valid Fibonacci-like sequence must have at least 3 elements
+        return maxLength >= 3 ? maxLength : 0;
+    }
 
