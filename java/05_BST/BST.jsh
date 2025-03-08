@@ -41,7 +41,9 @@ public class BinarySearchTree {
             } else {
                 if (temp.right == null) {
                     temp.right = newNode;
+                    return true;
                 }
+                temp = temp.right;
             }
         }
     }
