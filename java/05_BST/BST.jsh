@@ -12,6 +12,14 @@ public class BinarySearchTree {
         }
     }
 
+    public boolean hasLeft(Node node) {
+        return node.left != null;
+    }
+
+    public boolean hasRight(Node node) {
+        return node.right != null;
+    }
+
     public boolean insert(int value) {
         /*
         create newNode
@@ -33,13 +41,13 @@ public class BinarySearchTree {
                 return false;
             }
             if (newNode.value < temp.value) {
-                if (temp.left == null) {
+                if (!hasLeft(temp)) {
                     temp.left = newNode;
                     return true;
                 }
                 temp = temp.left;
             } else {
-                if (temp.right == null) {
+                if (!hasRight(temp)) {
                     temp.right = newNode;
                     return true;
                 }
