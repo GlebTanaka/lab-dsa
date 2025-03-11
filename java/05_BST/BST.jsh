@@ -20,6 +20,64 @@ public class BinarySearchTree {
         return node.right != null;
     }
 
+    public boolean isLeaf(Node node) {
+        return !hasLeft(node) && !hasRight(node);
+    }
+
+    //************ searching Parent Node of a Node *****************
+
+    // recursive
+    public Node parentOf(Node searchNode) {
+        if (searchNode == root) {
+            return null; // or throw an exception
+        }
+        return parentOf(root, searchNode);
+    }
+
+    // helper method with Short-Circuiting
+    private Node parentOf(Node currentNode, Node searchNode) {
+        if (currentNode == null || currentNode.left == searchNode || currentNode.right == searchNode) {
+            return currentNode;
+        }
+        if (searchNode.value < currentNode.value) {
+            Node leftParent = parentOf(currentNode.left, searchNode);
+            if (leftParent != null) {
+                return leftParent;
+            }
+        } else {
+            Node rightParent = parentOf(currentNode.right, searchNode);
+            if (rightParent != null) {
+                return rightParent;
+            }
+        }
+        return null;
+    }
+
+    // iterative:
+    public Node parentOfIter(Node searchNode) {
+        if (searchNode == null) {
+            throw new IllegalArgumentException("Search node cannot be null");
+        }
+        if (searchNode == root) {
+            return null; // Root node has no parent
+        }
+
+        Node currentNode = root;
+        while (currentNode != null) {
+            if (currentNode.left == searchNode || currentNode.right == searchNode) {
+                return currentNode;
+            }
+            if (searchNode.value < currentNode.value) {
+                currentNode = currentNode.left;
+            } else {
+                currentNode = currentNode.right;
+            }
+        }
+        return null; // Node not found
+    }
+
+
+
     public boolean insert(int value) {
         /*
         create newNode
