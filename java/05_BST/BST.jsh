@@ -20,8 +20,17 @@ public class BinarySearchTree {
         return node.right != null;
     }
 
+    public boolean hasChildren(Node node) {
+        return hasLeft(node) || hasRight(node);
+    }
+
+
     public boolean isLeaf(Node node) {
         return !hasLeft(node) && !hasRight(node);
+    }
+
+    public boolean isRoot(Node node) {
+        return node == root;
     }
 
     //************ searching Parent Node of a Node *****************
@@ -76,7 +85,49 @@ public class BinarySearchTree {
         return null; // Node not found
     }
 
+    public String toStringTree() {
+        return toStringTree("", root);
+    }
 
+    private String toStringTree(String BSTString, Node node) {
+        String currentString = "";
+        String data = String.format("%02d", node.value);
+
+        if (hasRight(node)) {
+            if (isRoot(node)) {
+                currentString += toStringTree(BSTString + "      ", node.right);
+            } else if (node == parentOf(node).right) {
+                currentString += toStringTree(BSTString + "      ", node.right);
+            } else {
+                currentString += toStringTree(BSTString + "│     ", node.right);
+            }
+        }
+        if (hasChildren(node)) {
+            if(!isLeaf(node)) {
+                currentString += BSTString + "[" + data + "]──┤" + System.lineSeparator()
+                ;
+            } else if (hasLeft(node)) {
+                currentString += BSTString + "[" + data + "]──┐" + System.lineSeparator()
+                ;
+            } else if (hasRight(node)) {
+                currentString += BSTString + "[" + data + "]──┘" + System.lineSeparator()
+                ;
+            }
+        } else if (isLeaf(node)) {
+            currentString += BSTString + "[" + data + "]" + System.lineSeparator()
+            ;
+        }
+        if (hasLeft(node)) {
+            if (isRoot(node)) {
+                currentString += toStringTree(BSTString + "      ", node.left);
+            } else if (node == parentOf(node).left) {
+                currentString += toStringTree(BSTString + "      ", node.left);
+            } else {
+                currentString += toStringTree(BSTString + "│     ", node.left);
+            }
+        }
+        return currentString;
+    }
 
     public boolean insert(int value) {
         /*
