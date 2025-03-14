@@ -86,47 +86,47 @@ public class BinarySearchTree {
     }
 
     public String toStringTree() {
-        return toStringTree("", root);
+        if (root == null) {
+            return "Tree is empty.";
+        }
+        return toStringTree("", root, false);
     }
 
-    private String toStringTree(String BSTString, Node node) {
-        String currentString = "";
-        String data = String.format("%02d", node.value);
+    private String toStringTree(String prefix, Node node, boolean isRightChild) {
+        if (node == null) {
+            return "";
+        }
 
+        StringBuilder result = new StringBuilder();
+
+        // Process right subtree
         if (hasRight(node)) {
-            if (isRoot(node)) {
-                currentString += toStringTree(BSTString + "      ", node.right);
-            } else if (node == parentOf(node).right) {
-                currentString += toStringTree(BSTString + "      ", node.right);
-            } else {
-                currentString += toStringTree(BSTString + "│     ", node.right);
-            }
+            result.append(toStringTree(prefix + (isRightChild ? "      " : "│     "), node.right, true));
         }
+
+        // Process current node
+        result.append(prefix)
+                .append("[")
+                .append(String.format("%02d", node.value))
+                .append("]");
+
         if (hasChildren(node)) {
-            if(!isLeaf(node)) {
-                currentString += BSTString + "[" + data + "]──┤" + System.lineSeparator()
-                ;
+            if (hasLeft(node) && hasRight(node)) {
+                result.append("──┤");
             } else if (hasLeft(node)) {
-                currentString += BSTString + "[" + data + "]──┐" + System.lineSeparator()
-                ;
-            } else if (hasRight(node)) {
-                currentString += BSTString + "[" + data + "]──┘" + System.lineSeparator()
-                ;
-            }
-        } else if (isLeaf(node)) {
-            currentString += BSTString + "[" + data + "]" + System.lineSeparator()
-            ;
-        }
-        if (hasLeft(node)) {
-            if (isRoot(node)) {
-                currentString += toStringTree(BSTString + "      ", node.left);
-            } else if (node == parentOf(node).left) {
-                currentString += toStringTree(BSTString + "      ", node.left);
+                result.append("──┐");
             } else {
-                currentString += toStringTree(BSTString + "│     ", node.left);
+                result.append("──┘");
             }
         }
-        return currentString;
+        result.append(System.lineSeparator());
+
+        // Process left subtree
+        if (hasLeft(node)) {
+            result.append(toStringTree(prefix + (isRightChild ? "│     " : "      "), node.left, false));
+        }
+
+        return result.toString();
     }
 
     public boolean insert(int value) {
