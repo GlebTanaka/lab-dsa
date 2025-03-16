@@ -1,4 +1,5 @@
-public class BinarySearchTree {
+import java.util.Arrays;
+import java.util.stream.Collectors;public class BinarySearchTree {
 
     private Node root;
 
@@ -85,11 +86,16 @@ public class BinarySearchTree {
         return null; // Node not found
     }
 
-    public String toStringTree() {
-        if (root == null) {
-            return "Tree is empty.";
-        }
-        return toStringTree("", root, false);
+//    public String toStringTree() {
+//        if (root == null) {
+//            return "Tree is empty.";
+//        }
+//        return toStringTree("", root, false);
+//    }
+    @Override
+    public String toString() {
+        return Arrays.stream(toStringTree("", root, false).split("\n"))
+                .collect(Collectors.joining(System.lineSeparator()));
     }
 
     private String toStringTree(String prefix, Node node, boolean isRightChild) {
@@ -101,7 +107,12 @@ public class BinarySearchTree {
 
         // Process right subtree
         if (hasRight(node)) {
-            result.append(toStringTree(prefix + (isRightChild ? "      " : "│     "), node.right, true));
+            if (prefix.isEmpty()) {
+                // special case for root
+                result.append(toStringTree("      ", node.right, true));
+            } else {
+                result.append(toStringTree(prefix + (isRightChild ? "      " : "|     "), node.right, true));
+            }
         }
 
         // Process current node
@@ -112,18 +123,18 @@ public class BinarySearchTree {
 
         if (hasChildren(node)) {
             if (hasLeft(node) && hasRight(node)) {
-                result.append("──┤");
+                result.append("--|");
             } else if (hasLeft(node)) {
-                result.append("──┐");
+                result.append("--,");
             } else {
-                result.append("──┘");
+                result.append("--'");
             }
         }
         result.append(System.lineSeparator());
 
         // Process left subtree
         if (hasLeft(node)) {
-            result.append(toStringTree(prefix + (isRightChild ? "│     " : "      "), node.left, false));
+            result.append(toStringTree(prefix + (isRightChild ? "|     " : "      "), node.left, false));
         }
 
         return result.toString();
