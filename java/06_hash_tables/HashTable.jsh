@@ -18,6 +18,16 @@ public class HashTable {
         this.table = new Node[size];
     }
 
+    private int hash(String key) {
+        int hash = 0;
+        for (int i = 0; i < key.length(); i++) {
+            int ascii = key.charAt(i);
+            hash = ((hash * 31) + ascii) % table.length;
+        }
+        // Force positivity using bitwise AND
+        return hash & Integer.MAX_VALUE;
+    }
+
     public void printHashTable() {
         for (int i = 0; i < size; i++) {
             System.out.println(i + ":");
