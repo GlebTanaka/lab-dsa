@@ -4,10 +4,10 @@ public class HashTable {
 
     class Node {
         String key;
-        String value;
+        int value;
         Node next;
 
-        public Node(String key, String value) {
+        public Node(String key, int value) {
             this.key = key;
             this.value = value;
         }
@@ -26,6 +26,20 @@ public class HashTable {
         }
         // Force positivity using bitwise AND
         return hash & Integer.MAX_VALUE;
+    }
+
+    public void put(String key, int value) {
+        int hash = hash(key);
+        Node newNode = new Node(key,value);
+        if (table[hash] == null) {
+            table[hash] = newNode;
+        } else {
+            Node current = table[hash];
+            while (current.next != null) {
+                current = current.next;
+            }
+            current.next = newNode;
+        }
     }
 
     public void printHashTable() {
