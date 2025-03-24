@@ -1,4 +1,4 @@
-public class HashTable {
+import java.util.ArrayList;public class HashTable {
     private int size;
     private Node[] table;
 
@@ -40,6 +40,56 @@ public class HashTable {
             }
             current.next = newNode;
         }
+    }
+
+    public int get(String key) {
+        int index = hash(key);
+        Node current = table[index];
+        while (current != null) {
+            if (current.key.equals(key)) {
+                return current.value;
+            }
+            current = current.next;
+        }
+        return -1;
+    }
+
+    public ArrayList<String> getKeys() {
+        ArrayList<String> keys = new ArrayList<>();
+        for (int i = 0; i < table.length; i++) {
+            Node current = table[i];
+            while (current != null) {
+                keys.add(current.key);
+                current = current.next;
+            }
+        }
+        return keys;
+
+    }
+
+    public boolean remove(String key) {
+        int hash = hash(key); // Calculate the hash for the key
+        Node current = table[hash];
+        Node previous = null;
+
+        while (current != null) {
+            if (current.key.equals(key)) {
+                // Key found; remove current node
+                if (previous == null) {
+                    // If it's the first node in the bucket
+                    table[hash] = current.next;
+                } else {
+                    // Adjust the 'next' pointer of the previous node
+                    previous.next = current.next;
+                }
+                return true; // Indicate successful removal
+            }
+            // Move to the next node in the chain
+            previous = current;
+            current = current.next;
+        }
+
+        return false; // Key not found
     }
 
     public void printHashTable() {
