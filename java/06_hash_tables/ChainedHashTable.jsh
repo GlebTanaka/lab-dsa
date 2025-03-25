@@ -1,4 +1,5 @@
-import java.util.ArrayList;public class HashTable {
+import java.util.ArrayList;
+public class ChainedHashTable {
     private int size;
     private Node[] table;
 
