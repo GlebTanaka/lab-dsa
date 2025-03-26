@@ -1,16 +1,24 @@
     public class OpenAddressingHashTable {
         private static final int DEFAULT_CAPACITY = 16;
         private static final double LOAD_FACTOR_THRESHOLD = 0.6;
+        private ProbingType probingType; // Enum for selecting probing type
 
-        private Entry[] table;  // Array to store entries
-        private int size;       // Number of elements in the hash table
-        private int capacity;   // Current capacity of the table
+        private Entry[] table;
+        private int size;
+        private int capacity;
 
-        // Entry Class to hold key-value pairs
+        // Enum for the Probing Type
+        public enum ProbingType {
+            LINEAR_PROBING,
+            QUADRATIC_PROBING,
+            DOUBLE_HASHING
+        }
+
+        // Entry class to hold key-value pair
         private static class Entry {
             String key;
             int value;
-            boolean isDeleted;  // Flag to indicate if the entry was deleted
+            boolean isDeleted;
 
             public Entry(String key, int value) {
                 this.key = key;
@@ -19,89 +27,112 @@
             }
         }
 
-        // Constructor
+        // Constructor with default probing type (Linear Probing)
         public OpenAddressingHashTable() {
-            this(DEFAULT_CAPACITY);
+            this(DEFAULT_CAPACITY, ProbingType.LINEAR_PROBING);
         }
 
-        public OpenAddressingHashTable(int initialCapacity) {
+        // Constructor with custom probing type
+        public OpenAddressingHashTable(int initialCapacity, ProbingType probingType) {
             this.capacity = initialCapacity;
             this.table = new Entry[capacity];
             this.size = 0;
+            this.probingType = probingType;
         }
 
-        // Hash Function
+        // Hash function
         private int hash(String key) {
             return (key.hashCode() & Integer.MAX_VALUE) % capacity;
         }
 
-        // Linear Probing Function
-        private int probe(int hash, int step) {
-            return (hash + step) % capacity;
+        // Secondary hash function (for Double Hashing)
+        private int secondaryHash(String key) {
+            return 1 + (key.hashCode() & Integer.MAX_VALUE) % (capacity - 1); // Must not return 0
         }
 
-        // Insert or Update a Key-Value Pair
+        // Generic probing function
+        private int probe(int hash, int step, String key) {
+            switch (probingType) {
+                case LINEAR_PROBING:
+                    return (hash + step) % capacity;
+                case QUADRATIC_PROBING:
+                    return (hash + step * step) % capacity;
+                case DOUBLE_HASHING:
+                    return (hash + step * secondaryHash(key)) % capacity;
+                default:
+                    throw new IllegalStateException("Invalid probing type");
+            }
+        }
+
+        // Insert method with collision handling using probing
         public void put(String key, int value) {
             if (loadFactor() > LOAD_FACTOR_THRESHOLD) {
-                resize(); // Resize the table if load factor exceeds threshold
+                resize();
             }
 
             int hash = hash(key);
             int step = 0;
 
-            while (table[hash] != null && !table[hash].isDeleted && !table[hash].key.equals(key)) {
-                hash = probe(hash, ++step); // Linear probing to find an empty slot
-            }
-
-            if (table[hash] == null || table[hash].isDeleted) {
-                // If this is a new insertion
-                table[hash] = new Entry(key, value);
-                size++;
-            } else {
-                // If the key already exists, overwrite the value
-                table[hash].value = value;
+            while (true) {
+                int index = probe(hash, step, key);
+                if (table[index] == null || table[index].isDeleted) {
+                    table[index] = new Entry(key, value);
+                    size++;
+                    return;
+                } else if (table[index].key.equals(key)) {
+                    table[index].value = value; // Overwrite existing value
+                    return;
+                }
+                step++;
             }
         }
 
-        // Retrieve a Value by Key
+        // Retrieve a value by key
         public int get(String key) {
             int hash = hash(key);
             int step = 0;
 
-            while (table[hash] != null) {
-                if (!table[hash].isDeleted && table[hash].key.equals(key)) {
-                    return table[hash].value; // Key found
+            while (true) {
+                int index = probe(hash, step, key);
+                if (table[index] == null) {
+                    break; // Key not found
                 }
-                hash = probe(hash, ++step); // Continue probing
+                if (!table[index].isDeleted && table[index].key.equals(key)) {
+                    return table[index].value;
+                }
+                step++;
             }
 
             return -1; // Key not found
         }
 
-        // Remove a Key-Value Pair
+        // Remove a key-value pair
         public boolean remove(String key) {
             int hash = hash(key);
             int step = 0;
 
-            while (table[hash] != null) {
-                if (!table[hash].isDeleted && table[hash].key.equals(key)) {
-                    // Mark the entry as deleted and reduce the size
-                    table[hash].isDeleted = true;
+            while (true) {
+                int index = probe(hash, step, key);
+                if (table[index] == null) {
+                    break; // Key not found
+                }
+                if (!table[index].isDeleted && table[index].key.equals(key)) {
+                    table[index].isDeleted = true; // Mark as deleted
                     size--;
                     return true;
                 }
-                hash = probe(hash, ++step);
+                step++;
             }
 
             return false; // Key not found
         }
 
-        // Load Factor Calculation
+        // Load factor calculation
         private double loadFactor() {
             return (double) size / capacity;
         }
 
-        // Resize and Rehash the Table
+        // Resize and rehash the table
         private void resize() {
             int newCapacity = capacity * 2;
             Entry[] oldTable = table;
@@ -112,18 +143,21 @@
 
             for (Entry entry : oldTable) {
                 if (entry != null && !entry.isDeleted) {
-                    put(entry.key, entry.value); // Rehash elements into new table
+                    put(entry.key, entry.value); // Rehash into the new table
                 }
             }
         }
 
-        // Return the Number of Key-Value Pairs
-        public int size() {
-            return size;
-        }
-
-        // Check if the Table is Empty
-        public boolean isEmpty() {
-            return size == 0;
+        public void printTable() {
+            System.out.println("Hash Table:");
+            for (int i = 0; i < capacity; i++) {
+                if (table[i] == null) {
+                    System.out.println("Index " + i + ": Empty");
+                } else if (table[i].isDeleted) {
+                    System.out.println("Index " + i + ": Deleted");
+                } else {
+                    System.out.println("Index " + i + ": Key = " + table[i].key + ", Value = " + table[i].value);
+                }
+            }
         }
     }

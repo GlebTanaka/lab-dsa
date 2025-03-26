@@ -14,7 +14,7 @@ public class ChainedHashTable {
         }
     }
 
-    public HashTable(int size) {
+    public ChainedHashTable(int size) {
         this.size = size;
         this.table = new Node[size];
     }
