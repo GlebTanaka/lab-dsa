@@ -1,106 +1,128 @@
-import java.util.ArrayList;
-public class ChainedHashTable {
-    private int size;
-    private Node[] table;
+    public class ChainedHashTable {
+        private static final int DEFAULT_CAPACITY = 7; // Default capacity for the hash table
+        private Node[] table; // Array of Nodes (for the chained buckets)
+        private int size;     // Number of key-value pairs in the table
 
-    class Node {
-        String key;
-        int value;
-        Node next;
+        // Custom Node class representing a Linked List Node
+        class Node {
+            String key;
+            int value;
+            Node next;
 
-        public Node(String key, int value) {
-            this.key = key;
-            this.value = value;
-        }
-    }
-
-    public ChainedHashTable(int size) {
-        this.size = size;
-        this.table = new Node[size];
-    }
-
-    private int hash(String key) {
-        int hash = 0;
-        for (int i = 0; i < key.length(); i++) {
-            int ascii = key.charAt(i);
-            hash = ((hash * 31) + ascii) % table.length;
-        }
-        // Force positivity using bitwise AND
-        return hash & Integer.MAX_VALUE;
-    }
-
-    public void put(String key, int value) {
-        int hash = hash(key);
-        Node newNode = new Node(key,value);
-        if (table[hash] == null) {
-            table[hash] = newNode;
-        } else {
-            Node current = table[hash];
-            while (current.next != null) {
-                current = current.next;
+            public Node(String key, int value) {
+                this.key = key;
+                this.value = value;
+                this.next = null;
             }
-            current.next = newNode;
         }
-    }
 
-    public int get(String key) {
-        int index = hash(key);
-        Node current = table[index];
-        while (current != null) {
-            if (current.key.equals(key)) {
-                return current.value;
-            }
-            current = current.next;
+        // Default Constructor (Uses Default Capacity)
+        public ChainedHashTable() {
+            this(DEFAULT_CAPACITY);
         }
-        return -1;
-    }
 
-    public ArrayList<String> getKeys() {
-        ArrayList<String> keys = new ArrayList<>();
-        for (int i = 0; i < table.length; i++) {
-            Node current = table[i];
+        // Constructor with Custom Initial Capacity
+        public ChainedHashTable(int initialCapacity) {
+            this.table = new Node[initialCapacity];
+            this.size = 0;
+        }
+
+        // Hash Function
+        private int hash(String key) {
+            return (key.hashCode() & Integer.MAX_VALUE) % table.length;
+        }
+
+        // Add or Update a Key-Value Pair
+        public void put(String key, int value) {
+            int index = hash(key);
+
+            Node head = table[index];
+            Node current = head;
+
+            // Check if the key already exists in the chain
             while (current != null) {
-                keys.add(current.key);
-                current = current.next;
-            }
-        }
-        return keys;
-
-    }
-
-    public boolean remove(String key) {
-        int hash = hash(key); // Calculate the hash for the key
-        Node current = table[hash];
-        Node previous = null;
-
-        while (current != null) {
-            if (current.key.equals(key)) {
-                // Key found; remove current node
-                if (previous == null) {
-                    // If it's the first node in the bucket
-                    table[hash] = current.next;
-                } else {
-                    // Adjust the 'next' pointer of the previous node
-                    previous.next = current.next;
+                if (current.key.equals(key)) {
+                    current.value = value; // Overwrite the value
+                    return;
                 }
-                return true; // Indicate successful removal
-            }
-            // Move to the next node in the chain
-            previous = current;
-            current = current.next;
-        }
-
-        return false; // Key not found
-    }
-
-    public void printHashTable() {
-        for (int i = 0; i < size; i++) {
-            System.out.println(i + ":");
-            Node current = table[i];
-            while (current != null) {
-                System.out.println("  {" + current.key + "= " + current.value + "}");
                 current = current.next;
             }
+
+            // If the key does not exist, add a new Node at the beginning of the chain
+            Node newNode = new Node(key, value);
+            newNode.next = head;
+            table[index] = newNode;
+
+            size++;
+        }
+
+        // Retrieve a Value by Key
+        public int get(String key) {
+            int index = hash(key);
+
+            Node current = table[index];
+
+            // Traverse the chain to find the key
+            while (current != null) {
+                if (current.key.equals(key)) {
+                    return current.value; // Key found
+                }
+                current = current.next;
+            }
+
+            return -1; // Key not found
+        }
+
+        // Remove a Key-Value Pair
+        public boolean remove(String key) {
+            int index = hash(key);
+
+            Node current = table[index];
+            Node prev = null;
+
+            // Traverse the chain to find and remove the key
+            while (current != null) {
+                if (current.key.equals(key)) {
+                    if (prev == null) {
+                        table[index] = current.next; // Remove the first node
+                    } else {
+                        prev.next = current.next; // Bypass the node to be removed
+                    }
+                    size--;
+                    return true;
+                }
+                prev = current;
+                current = current.next;
+            }
+
+            return false; // Key not found
+        }
+
+        // Get the Number of Key-Value Pairs in the Table
+        public int size() {
+            return size;
+        }
+
+        // Check if the Table is Empty
+        public boolean isEmpty() {
+            return size == 0;
+        }
+
+        // Print the Hash Table for Debugging
+        public void printTable() {
+            System.out.println("Hash Table:");
+            for (int i = 0; i < table.length; i++) {
+                System.out.print("Index " + i + ":");
+                Node current = table[i];
+                if (current == null) {
+                    System.out.println(" Empty");
+                } else {
+                    while (current != null) {
+                        System.out.print(" -> [Key=" + current.key + ", Value=" + current.value + "]");
+                        current = current.next;
+                    }
+                    System.out.println();
+                }
+            }
         }
     }
-}
