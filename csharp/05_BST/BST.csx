@@ -58,6 +58,38 @@ public class BinarySearchTree
     {
         root = null;
     }
+    
+    // Method to find the parent node of a given node
+    public Node ParentOf(Node current, Node searchNode)
+    {
+        return ParentOfRecursive(root, null, searchNode);
+    }
+
+    private Node ParentOfRecursive(Node current, Node parent, Node searchNode)
+    {
+        // Base case: if the current node is null, return null
+        if (current == null)
+        {
+            return null;
+        }
+
+        // If the current node matches the searchNode, return the parent
+        if (current == searchNode)
+        {
+            return parent;
+        }
+
+        // Recursively search in the left subtree
+        Node leftResult = ParentOfRecursive(current.Left, current, searchNode);
+        if (leftResult != null)
+        {
+            return leftResult;
+        }
+
+        // Recursively search in the right subtree
+        return ParentOfRecursive(current.Right, current, searchNode);
+    }
+
 
     // Insert a new value into the BST
     public void Insert(int value)
