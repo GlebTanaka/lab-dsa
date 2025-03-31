@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 
 public class BinarySearchTree
 {
@@ -183,6 +184,69 @@ public class BinarySearchTree
     {
         return root;
     }
+    
+    // Overriding ToString to provide tree visualization
+    public override string ToString()
+    {
+        // Convert the string representation into a system-specific line-separated format
+        return string.Join(Environment.NewLine, ToStringTree("", root, false).Split('\n'));
+    }
+
+    private string ToStringTree(string prefix, Node node, bool isRightChild)
+    {
+        if (node == null)
+        {
+            return "";
+        }
+
+        var result = new StringBuilder();
+
+        // Process the right subtree
+        if (node.HasRight())
+        {
+            if (string.IsNullOrEmpty(prefix))
+            {
+                result.Append(ToStringTree("      ", node.Right, true));
+            }
+            else
+            {
+                result.Append(ToStringTree(prefix + (isRightChild ? "      " : "|     "), node.Right, true));
+            }
+        }
+
+        // Process current node
+        result.Append(prefix)
+              .Append("[")
+              .Append($"{node.Data:00}") // Format value as 2-digits
+              .Append("]");
+
+        if (node.HasChildren())
+        {
+            if (node.HasLeft() && node.HasRight())
+            {
+                result.Append("--|");
+            }
+            else if (node.HasLeft())
+            {
+                result.Append("--,");
+            }
+            else
+            {
+                result.Append("--'");
+            }
+        }
+
+        result.Append(Environment.NewLine);
+
+        // Process the left subtree
+        if (node.HasLeft())
+        {
+            result.Append(ToStringTree(prefix + (isRightChild ? "|     " : "      "), node.Left, false));
+        }
+
+        return result.ToString();
+    }
+
 }
 
 // Example usage
