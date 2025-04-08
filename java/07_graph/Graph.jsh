@@ -45,4 +45,11 @@ public class Graph {
         adjList.get(dest).remove(src);
         return true;
     }
+
+    public void printGraph() {
+        for (String vertex : adjList.keySet()) {
+            System.out.print(vertex + " -> ");
+            System.out.println(adjList.get(vertex));
+        }
+    }
 }
