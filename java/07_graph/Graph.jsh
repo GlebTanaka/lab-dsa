@@ -34,4 +34,15 @@ public class Graph {
         adjList.get(src).add(dest);
         adjList.get(dest).add(src);
     }
+
+    public boolean removeEdge(String src, String dest) {
+        // Check if both vertices exits
+        if (!adjList.containsKey(src) || !adjList.containsKey(dest)) {
+            return false; // One or both vertices do not exist
+        }
+
+        adjList.get(src).remove(dest);
+        adjList.get(dest).remove(src);
+        return true;
+    }
 }
