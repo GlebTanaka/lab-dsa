@@ -31,4 +31,13 @@ public class Heap {
         this.heap.set(indexTwo, temp);
     }
 
+    public void insert(int value) {
+        this.heap.add(value);
+        int index = this.heap.size() - 1;
+        while (index > 0 && this.heap.get(this.parentIndex(index)) < this.heap.get(index)) {
+            this.swap(this.parentIndex(index), index);
+            index = this.parentIndex(index);
+        }
+    }
+
 }
