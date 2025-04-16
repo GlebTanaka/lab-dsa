@@ -40,4 +40,19 @@ public class Heap {
         }
     }
 
+    public Integer extractMax() {
+        if (this.heap.isEmpty()) {
+            return null;
+        }
+        int max = this.heap.get(0);
+        this.heap.set(0, this.heap.get(this.heap.size() - 1));
+        this.heap.remove(this.heap.size() - 1);
+        int index = 0;
+        while (index < this.heap.size()) {
+            int leftChild = this.leftChildIndex(index);
+        }
+        return max;
+    }
+
+
 }
