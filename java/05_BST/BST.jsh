@@ -200,4 +200,18 @@ import java.util.stream.Collectors;public class BinarySearchTree {
         return false;
     }
 
+    private boolean rContains(Node node, int value) {
+        if (node == null) {
+            return false;
+        }
+        if (node.value == value) {
+            return true;
+        }
+        return rContains(node.value < value ? node.right : node.left, value);
+    }
+
+    public boolean rContains(int value) {
+        return rContains(root, value);
+    }
+
 }
