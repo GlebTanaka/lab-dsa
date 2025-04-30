@@ -1,5 +1,7 @@
 import java.util.Arrays;
-import java.util.stream.Collectors;public class BinarySearchTree {
+import java.util.stream.Collectors;
+
+public class BinarySearchTree {
 
     private Node root;
 
@@ -232,5 +234,40 @@ import java.util.stream.Collectors;public class BinarySearchTree {
             root = new Node(value);
         }
         rInsert(root, value);
+    }
+
+    private Node deleteNode(Node currentNode, int value) {
+        if (currentNode == null) {
+            return null;
+        }
+        if (value < currentNode.value) {
+            currentNode.left = deleteNode(currentNode.left, value);
+        } else if (value > currentNode.value) {
+            currentNode.right = deleteNode(currentNode.right, value);
+        } else {
+            if (isLeaf(currentNode)) {
+                return null;
+            } else if (!hasLeft(currentNode)) {
+                currentNode = currentNode.right;
+            } else if (!hasRight(currentNode)) {
+                currentNode = currentNode.left;
+            } else {
+                int minValue = minValue(currentNode.right);
+                currentNode.value = minValue;
+                currentNode.right = deleteNode(currentNode.right, minValue);
+            }
+        }
+        return currentNode;
+    }
+
+    private int minValue(Node currentNode) {
+        while (currentNode.left != null) {
+            currentNode = currentNode.left;
+        }
+        return currentNode.value;
+    }
+
+    public void deleteNode(int value) {
+        root = deleteNode(root, value);
     }
 }
