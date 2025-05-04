@@ -1,4 +1,6 @@
 import java.util.Arrays;
+import java.util.Queue;
+import java.util.LinkedList;
 import java.util.stream.Collectors;
 
 public class BinarySearchTree {
@@ -270,4 +272,27 @@ public class BinarySearchTree {
     public void deleteNode(int value) {
         root = deleteNode(root, value);
     }
+
+    // ------ tree traversal ---------------------
+    // BFS
+    public ArrayList<Integer> bfs() {
+        Node current = root;
+        // using Javas implemented Queue for a LinkedList
+        Queue<Node> queue = new LinkedList<>();
+        ArrayList<Integer> result = new ArrayList<>();
+        queue.add(current);
+
+        while (!queue.isEmpty()) {
+            current = queue.remove();
+            result.add(current.value);
+            if (current.left != null) {
+                queue.add(current.left);
+            }
+            if (current.right != null) {
+                queue.add(current.right);
+            }
+        }
+        return result;
+    }
+
 }
