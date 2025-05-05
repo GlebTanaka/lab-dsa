@@ -295,4 +295,49 @@ public class BinarySearchTree {
         return result;
     }
 
+    // DFS preorder
+    public ArrayList<Integer> dfsPreorder() {
+        ArrayList<Integer> result = new ArrayList<>();
+        traversePreorder(root, result);
+        return result;
+    }
+
+    private void traversePreorder(Node current, ArrayList<Integer> result) {
+        if (current == null) return;
+
+        // Preorder: Root -> Left -> Right
+        result.add(current.value);           // Process root
+        traversePreorder(current.left, result);   // Process left subtree
+        traversePreorder(current.right, result);  // Process right subtree
+    }
+
+    // DFS postorder
+    public ArrayList<Integer> dfsPostorder() {
+        ArrayList<Integer> result = new ArrayList<>();
+        traversePostorder(root, result);
+        return result;
+    }
+
+    private void traversePostorder(Node current, ArrayList<Integer> result) {
+        if (current == null) return;
+
+        traversePostorder(current.left, result);   // Process left
+        traversePostorder(current.right, result);  // Process right
+        result.add(current.value);                // Process root
+    }
+
+    // DFS inorder
+    public ArrayList<Integer> dfsInorder() {
+        ArrayList<Integer> result = new ArrayList<>();
+        traverseInorder(root, result);
+        return result;
+    }
+    private void traverseInorder(Node current, ArrayList<Integer> result) {
+        if (current == null) return;
+
+        traverseInorder(current.left, result);    // Process left
+        result.add(current.value);                // Process root
+        traverseInorder(current.right, result);   // Process right
+    }
+
 }
