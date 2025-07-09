@@ -1,10 +1,12 @@
 import java.util.Arrays;
 import java.util.Queue;
 import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 public class BinarySearchTree {
 
+    //region Node Structure
     private Node root;
 
     private class Node {
@@ -16,7 +18,9 @@ public class BinarySearchTree {
             this.value = value;
         }
     }
+    //endregion
 
+    //region Helper Methods
     public boolean hasLeft(Node node) {
         return node.left != null;
     }
@@ -29,7 +33,6 @@ public class BinarySearchTree {
         return hasLeft(node) || hasRight(node);
     }
 
-
     public boolean isLeaf(Node node) {
         return !hasLeft(node) && !hasRight(node);
     }
@@ -37,18 +40,20 @@ public class BinarySearchTree {
     public boolean isRoot(Node node) {
         return node == root;
     }
+    //endregion
 
-    //************ searching Parent Node of a Node *****************
+    //region Parent Node Operations
 
-    // recursive
+    /**
+     * Finds the parent of a given node using recursion
+     */
     public Node parentOf(Node searchNode) {
         if (searchNode == root) {
-            return null; // or throw an exception
+            return null;
         }
         return parentOf(root, searchNode);
     }
 
-    // helper method with Short-Circuiting
     private Node parentOf(Node currentNode, Node searchNode) {
         if (currentNode == null || currentNode.left == searchNode || currentNode.right == searchNode) {
             return currentNode;
@@ -67,13 +72,15 @@ public class BinarySearchTree {
         return null;
     }
 
-    // iterative:
+    /**
+     * Finds the parent of a given node using iteration
+     */
     public Node parentOfIter(Node searchNode) {
         if (searchNode == null) {
             throw new IllegalArgumentException("Search node cannot be null");
         }
         if (searchNode == root) {
-            return null; // Root node has no parent
+            return null;
         }
 
         Node currentNode = root;
@@ -87,15 +94,11 @@ public class BinarySearchTree {
                 currentNode = currentNode.right;
             }
         }
-        return null; // Node not found
+        return null;
     }
+    //endregion
 
-//    public String toStringTree() {
-//        if (root == null) {
-//            return "Tree is empty.";
-//        }
-//        return toStringTree("", root, false);
-//    }
+    //region Tree Visualization
     @Override
     public String toString() {
         return Arrays.stream(toStringTree("", root, false).split("\n"))
@@ -111,12 +114,11 @@ public class BinarySearchTree {
 
         // Process right subtree
         if (hasRight(node)) {
-            if (prefix.isEmpty()) {
-                // special case for root
-                result.append(toStringTree("      ", node.right, true));
-            } else {
-                result.append(toStringTree(prefix + (isRightChild ? "      " : "|     "), node.right, true));
-            }
+            result.append(toStringTree(
+                    prefix + (prefix.isEmpty() ? "      " : (isRightChild ? "      " : "|     ")),
+                    node.right,
+                    true
+            ));
         }
 
         // Process current node
@@ -126,39 +128,32 @@ public class BinarySearchTree {
                 .append("]");
 
         if (hasChildren(node)) {
-            if (hasLeft(node) && hasRight(node)) {
-                result.append("--|");
-            } else if (hasLeft(node)) {
-                result.append("--,");
-            } else {
-                result.append("--'");
-            }
+            result.append(hasLeft(node) && hasRight(node) ? "--|" :
+                    hasLeft(node) ? "--," : "--'");
         }
         result.append(System.lineSeparator());
 
         // Process left subtree
         if (hasLeft(node)) {
-            result.append(toStringTree(prefix + (isRightChild ? "|     " : "      "), node.left, false));
+            result.append(toStringTree(
+                    prefix + (isRightChild ? "|     " : "      "),
+                    node.left,
+                    false
+            ));
         }
 
         return result.toString();
     }
+    //endregion
 
+    //region Basic Operations
     public boolean insert(int value) {
-        /*
-        create newNode
-        if root == null then root = newNode
-        temp = root
-        while loop
-            if newNode == temp return false
-            if < left else > right
-            if null insert newNode else move to next
-         */
         Node newNode = new Node(value);
         if (root == null) {
             root = newNode;
             return true;
         }
+
         Node temp = root;
         while (true) {
             if (newNode.value == temp.value) {
@@ -181,16 +176,6 @@ public class BinarySearchTree {
     }
 
     public boolean contains(int value) {
-        /*
-        if root == null return false <- optional step
-        tempt = root
-        while temp != null
-            if < left
-            else if > right
-            else == return true
-        return false
-         */
-        // if (root == null) {return false;} // optional step
         Node temp = root;
         while (temp != null) {
             if (value < temp.value) {
@@ -203,6 +188,12 @@ public class BinarySearchTree {
         }
         return false;
     }
+    //endregion
+
+    //region Recursive Operations
+    public boolean rContains(int value) {
+        return rContains(root, value);
+    }
 
     private boolean rContains(Node node, int value) {
         if (node == null) {
@@ -214,12 +205,15 @@ public class BinarySearchTree {
         return rContains(node.value < value ? node.right : node.left, value);
     }
 
-    public boolean rContains(int value) {
-        return rContains(root, value);
+    public void rInsert(int value) {
+        if (root == null) {
+            root = new Node(value);
+            return;
+        }
+        rInsert(root, value);
     }
 
     private Node rInsert(Node currentNode, int value) {
-        // base case
         if (currentNode == null) {
             return new Node(value);
         }
@@ -231,11 +225,8 @@ public class BinarySearchTree {
         return currentNode;
     }
 
-    public void rInsert(int value) {
-        if (root == null) {
-            root = new Node(value);
-        }
-        rInsert(root, value);
+    public void deleteNode(int value) {
+        root = deleteNode(root, value);
     }
 
     private Node deleteNode(Node currentNode, int value) {
@@ -268,16 +259,15 @@ public class BinarySearchTree {
         }
         return currentNode.value;
     }
+    //endregion
 
-    public void deleteNode(int value) {
-        root = deleteNode(root, value);
-    }
+    //region Tree Traversal
 
-    // ------ tree traversal ---------------------
-    // BFS
+    /**
+     * Breadth-First Search traversal
+     */
     public ArrayList<Integer> bfs() {
         Node current = root;
-        // using Javas implemented Queue for a LinkedList
         Queue<Node> queue = new LinkedList<>();
         ArrayList<Integer> result = new ArrayList<>();
         queue.add(current);
@@ -295,7 +285,9 @@ public class BinarySearchTree {
         return result;
     }
 
-    // DFS preorder
+    /**
+     * Depth-First Search - Preorder traversal (Root -> Left -> Right)
+     */
     public ArrayList<Integer> dfsPreorder() {
         ArrayList<Integer> result = new ArrayList<>();
         traversePreorder(root, result);
@@ -304,14 +296,14 @@ public class BinarySearchTree {
 
     private void traversePreorder(Node current, ArrayList<Integer> result) {
         if (current == null) return;
-
-        // Preorder: Root -> Left -> Right
-        result.add(current.value);           // Process root
-        traversePreorder(current.left, result);   // Process left subtree
-        traversePreorder(current.right, result);  // Process right subtree
+        result.add(current.value);
+        traversePreorder(current.left, result);
+        traversePreorder(current.right, result);
     }
 
-    // DFS postorder
+    /**
+     * Depth-First Search - Postorder traversal (Left -> Right -> Root)
+     */
     public ArrayList<Integer> dfsPostorder() {
         ArrayList<Integer> result = new ArrayList<>();
         traversePostorder(root, result);
@@ -320,24 +312,25 @@ public class BinarySearchTree {
 
     private void traversePostorder(Node current, ArrayList<Integer> result) {
         if (current == null) return;
-
-        traversePostorder(current.left, result);   // Process left
-        traversePostorder(current.right, result);  // Process right
-        result.add(current.value);                // Process root
+        traversePostorder(current.left, result);
+        traversePostorder(current.right, result);
+        result.add(current.value);
     }
 
-    // DFS inorder
+    /**
+     * Depth-First Search - Inorder traversal (Left -> Root -> Right)
+     */
     public ArrayList<Integer> dfsInorder() {
         ArrayList<Integer> result = new ArrayList<>();
         traverseInorder(root, result);
         return result;
     }
+
     private void traverseInorder(Node current, ArrayList<Integer> result) {
         if (current == null) return;
-
-        traverseInorder(current.left, result);    // Process left
-        result.add(current.value);                // Process root
-        traverseInorder(current.right, result);   // Process right
+        traverseInorder(current.left, result);
+        result.add(current.value);
+        traverseInorder(current.right, result);
     }
-
+    //endregion
 }
