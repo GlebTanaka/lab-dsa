@@ -1,4 +1,7 @@
-﻿public static int[] merge(int[] arr1, int[] arr2) {
+﻿using System;
+
+// helper method
+public static int[] Merge(int[] arr1, int[] arr2) {
     int[] result = new int[arr1.length + arr2.length];
     int i = 0, j = 0, k = 0;
     
@@ -24,7 +27,7 @@
     return result;
 }
 
-public static void mergeSort01(int[] arr) {
+public static void MergeSort01(int[] arr) {
     // Base case: if array has 1 or fewer elements, it's already sorted
     if (arr == null || arr.length <= 1) {
         return;
@@ -48,8 +51,8 @@ public static void mergeSort01(int[] arr) {
     }
     
     // Recursively sort the two halves
-    mergeSort01(left);
-    mergeSort01(right);
+    MergeSort01(left);
+    MergeSort01(right);
     
     // Merge the sorted halves using our merge helper function
     int[] merged = merge(left, right);
@@ -58,4 +61,23 @@ public static void mergeSort01(int[] arr) {
     for (int i = 0; i < arr.length; i++) {
         arr[i] = merged[i];
     }
+}
+
+
+int[] MergeSort02(int[] array) {
+    if (array.Length <= 1) {
+        return array;
+    }
+
+    int mid = array.Length / 2;
+
+    // Recursively sort each half
+    // In modern C# (.NET Core 3+, .NET 5+) we can use the range operator array[start..end] 
+    // instead of Arrays.copyOfRange. This returns a copy, not a view — same as Java’s copyOfRange.
+    // You could use var left = MergeSort02(array[0..mid]); to avoid repeating the type.
+    int[] left = MergeSort02(array[0..mid]);
+    int[] right = MergeSort02(array[mid..]);
+
+    // Merge the sorted halves
+    return Merge(left, right);
 }
