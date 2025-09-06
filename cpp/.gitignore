@@ -1,0 +1,70 @@
+# Build directories (CLion/CMake)
+cmake-build-*/
+build/
+out/
+bin/
+lib/
+
+# Object files and binaries
+*.o
+*.obj
+*.lo
+*.la
+*.a
+*.lib
+*.so
+*.dylib
+*.dll
+*.exe
+*.pch
+*.pdb
+
+# CMake generated files
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+compile_commands.json
+install_manifest.txt
+Testing/Temporary/
+
+# CLion / JetBrains
+.idea/
+# If you want to keep some project settings, remove .idea/ above and ignore selectively:
+# .idea/workspace.xml
+# .idea/**/dataSources/
+# .idea/**/dataSources.local.xml
+# .idea/**/shelf/
+# .idea/**/tasks.xml
+
+# Compiler and analyzer caches
+*.gcno
+*.gcda
+*.gcov
+*.profraw
+*.profdata
+*.gcov.json
+.cache/
+.clangd/
+
+# Package managers (uncomment if you use them)
+# Conan
+#.conan/
+#conanbuild*/
+#conanfile.lock
+
+# vcpkg
+#vcpkg_installed/
+#vcpkg*.log
+
+# CMake presets: track Presets, ignore user-specific
+CMakeUserPresets.json
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Crash/diagnostics
+core
+*.core
+*.dmp
