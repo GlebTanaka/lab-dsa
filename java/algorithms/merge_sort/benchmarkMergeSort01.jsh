@@ -35,3 +35,5 @@ long elapsed = System.nanoTime() - start;
 
 System.out.println("First 10: " + Arrays.toString(Arrays.copyOf(sorted, 10)) + " ...");
 System.out.printf("Time taken: %.6f ms%n", elapsed / 1_000_000.0);
+
+/exit
